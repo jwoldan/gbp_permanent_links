@@ -1,9 +1,10 @@
 gbp_permanent_links_jrw
 =======================
 
-_gbp_permanent_links_ is an excellent plugin created by Graeme Porteous.  For more information about the plugin, see the [post][1] in the Textpattern forum.
+_gbp_permanent_links_ is an excellent plugin for [Textpattern][tp] created by Graeme Porteous.  For more information about the plugin, see the [post][] in the Textpattern forum.
 
-[1]: http://forum.textpattern.com/viewtopic.php?id=18918
+[tp]: http://textpattern.com/
+[post]: http://forum.textpattern.com/viewtopic.php?id=18918
 
 This version of the plugin adds support for custom permalinks for articles that share the same url-title where the article permalinks differ only by date components.  For example, given two articles in a single section with the url-title of 'article' posted on different days, the plugin is able to correctly map the following /section/year/month/day/article permalinks:
 
