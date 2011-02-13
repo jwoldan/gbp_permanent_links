@@ -1,7 +1,7 @@
-gbp_permanent_links_jrw
+gbp\_permanent\_links\_jrw
 =======================
 
-_gbp_permanent_links_ is an excellent plugin for [Textpattern][tp] created by Graeme Porteous.  For more information about the plugin, see the [post][] in the Textpattern forum.
+_gbp\_permanent\_links_ is an excellent plugin for [Textpattern][tp] created by Graeme Porteous.  For more information about the plugin, see the [post][] in the Textpattern forum.
 
 [tp]: http://textpattern.com/
 [post]: http://forum.textpattern.com/viewtopic.php?id=18918

@@ -1,9 +1,9 @@
 <?php
 
 $plugin['name'] = 'gbp_permanent_links_jrw';
-$plugin['version'] = '0.14_jrw.1';
+$plugin['version'] = '0.14_jrw.2';
 $plugin['author'] = 'Graeme Porteous, modified by Jeffrey Woldan';
-$plugin['author_uri'] = 'http://rgbp.co.uk/projects/textpattern/gbp_permanent_links/';
+$plugin['author_uri'] = 'https://github.com/jwoldan/gbp_permanent_links';
 $plugin['description'] = 'Custom permanent links rules';
 $plugin['type'] = '1';
 
@@ -47,6 +47,7 @@ class PermanentLinks extends GBPPlugin
 		'check_pretext_section_context' => array('value' => 0 , 'type' => 'yesnoradio'),
 		'force_lowercase_urls' => array('value' => 1 , 'type' => 'yesnoradio'),
 		'automatically_append_title' => array('value' => 1 , 'type' => 'yesnoradio'),
+		'use_cleaver_partial_matches' => array('value' => 1 , 'type' => 'yesnoradio'),
 		'permlink_redirect_http_status' => array('value' => '301' , 'type' => 'text_input'),
 		'url_redirect_http_status' => array('value' => '302' , 'type' => 'text_input'),
 		'text_and_regex_segment_scores' => array('value' => '0' , 'type' => 'text_input'),
@@ -419,7 +420,7 @@ class PermanentLinks extends GBPPlugin
 
 						$this->debug(($match == true) ? 'YES' : 'NO');
 
-						if (!$match && !$cleaver_partial_match) {
+						if (!$match && !$cleaver_partial_match && $this->pref('use_cleaver_partial_matches')) {
 							// There hasn't been a match or a complete cleaver partial match. Lets try to be cleaver and
 							// check to see if this component is either a title, page or a feed. This makes it more probable
 							// a successful match for a given permlink rule occurs.
@@ -462,7 +463,9 @@ class PermanentLinks extends GBPPlugin
 				
 				if (!isset($pretext_replacement['id'])) {
 					if(isset($pretext_replacement['url_title'])) {
-						if(isset($pretext_replacement['year'])) {
+						if(isset($pretext_replacement['date'])) {
+							$date_val = $pretext_replacement['date'];
+						} else if(isset($pretext_replacement['year'])) {
 							$date_val = $pretext_replacement['year'];
 							if(isset($pretext_replacement['month'])) {
 								$date_val .= '-' . $pretext_replacement['month'];
@@ -471,11 +474,17 @@ class PermanentLinks extends GBPPlugin
 								}
 							}
 						}
-						if ($rs = safe_row('ID, Posted', 'textpattern', "`url_title` like '$pretext_replacement[url_title]' $context_str and `Posted` like '$date_val%' and `Status` >= 4 order by `Posted` desc limit 1")) {
+						if(isset($date_val)) $context_str .= " and `Posted` like '$date_val%'";
+						if ($rs = safe_row('ID, Posted', 'textpattern', "`url_title` like '{$pretext_replacement['url_title']}' $context_str and `Status` >= 4 order by `Posted` desc limit 1")) {
+							if(isset($date_val)) $this->debug('Found date and title-based match.');
+							else $this->debug('Found title-based match.');
 							$pretext_replacement['id'] = $rs['ID'];
 							$pretext_replacement['Posted'] = $rs['Posted'];
 							$pretext['numPages'] = 1;
 							$pretext['is_article_list'] = false;
+						} else {
+							$match = false;
+							unset($pretext_replacement);
 						}
 					}
 				}
