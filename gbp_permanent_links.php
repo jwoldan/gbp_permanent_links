@@ -35,6 +35,7 @@ $txp_current_plugin = $gbp_current_plugin;
 
 class PermanentLinks extends GBPPlugin
 {
+	var $permissions = '1,2';
 	var $preferences = array(
 		'show_prefix' => array('value' => 0, 'type' => 'yesnoradio'),
 		'show_suffix' => array('value' => 0, 'type' => 'yesnoradio'),
@@ -1200,6 +1201,7 @@ class PermanentLinks extends GBPPlugin
 
 class PermanentLinksBuildTabView extends GBPAdminTabView
 {
+	var $permissions = '1,2';
 	function preload () {
 		register_callback(array(&$this, 'post_save_permlink'), $this->parent->event, gbp_save, 1);
 		register_callback(array(&$this, 'post_save_permlink'), $this->parent->event, gbp_post, 1);
@@ -1790,6 +1792,7 @@ HTML;
 
 class PermanentLinksListTabView extends GBPAdminTabView
 {
+	var $permissions = '1,2';
 	function preload () {
 		register_callback(array(&$this, $this->parent->event.'_multi_edit'), $this->parent->event, $this->parent->event.'_multi_edit', 1);
 		register_callback(array(&$this, $this->parent->event.'_change_pageby'), $this->parent->event, $this->parent->event.'_change_pageby', 1);
